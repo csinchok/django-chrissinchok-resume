@@ -1,0 +1,22 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>{{me.first_name}} {{me.last_name}}'s Resume</title>
+	</head>
+	<body>
+		<div class="hresume">
+			{% include "snippets/address.html" %}
+			<p class="summary">
+				{{me.bio}}
+			</p>
+			<div class="skills">
+			</div>
+			<ol class="vcalendar">
+				{% for role in roles %}
+				{% include "snippets/role.html" %}
+				{% endfor %}
+			</ol>
+		</div>
+	</body>
+</html>
