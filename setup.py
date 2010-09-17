@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name = "django-chrissinchok-resume",
+    name = "chrissinchok_resume",
     version = "0.1",
     url = 'http://github.com/csinchok/django-chrissinchok-resume',
     license = 'BSD',
