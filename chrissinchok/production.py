@@ -1,0 +1,2 @@
+
+from chrissinchok.settings import *

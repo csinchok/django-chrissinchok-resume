@@ -4,13 +4,11 @@ from django.db import models
 from django.db.models import Sum
 from django.contrib.sites.models import Site
 from django.contrib.localflavor.us import models as usmodels
-
-import mptt
-
-from django.db import models
 from django.contrib.auth.models import User
 
-class Skill(models.Model):
+from mptt.models import MPTTModel
+
+class Skill(MPTTModel):
     """A skill Chris Sinchok has some experience in.
     
     A skill has a score, calculated against time. This calculation is based on experiences logged over
@@ -19,6 +17,10 @@ class Skill(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField(null=True, blank=True)
     parent = models.ForeignKey('self', null=True, blank=True, related_name='children')
+    
+    class MPTTMeta:
+        level_attr = 'mptt_level'
+        order_insertion_by=['name']
     
     def __unicode__(self):
         return self.name
@@ -48,9 +50,6 @@ class Skill(models.Model):
             effect_list = effect_list.filter(experience__enddate__lt=enddate)
                 
         return effect_list
-
-mptt.register(Skill, order_insertion_by=['name'])
-
 
 class Company(models.Model):
     """A company that Chris Sinchok has worked for."""
