@@ -24,3 +24,5 @@ chrissinchok.zip
 var
 chrissinchok.db
 fabfile.py
+.mr.developer.cfg
+src/django-mptt/

@@ -6,17 +6,17 @@ from django.contrib.sites.models import Site
 from django.contrib.localflavor.us import models as usmodels
 from django.contrib.auth.models import User
 
-from mptt.models import MPTTModel
+from mptt.models import MPTTModel, TreeForeignKey
 
 class Skill(MPTTModel):
-    """A skill Chris Sinchok has some experience in.
+    """A skill the candidate has some experience in.
     
     A skill has a score, calculated against time. This calculation is based on experiences logged over
     a given duration of time.
     """
     name = models.CharField(max_length=50)
     description = models.TextField(null=True, blank=True)
-    parent = models.ForeignKey('self', null=True, blank=True, related_name='children')
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children')
     
     class MPTTMeta:
         level_attr = 'mptt_level'
@@ -51,11 +51,20 @@ class Skill(MPTTModel):
                 
         return effect_list
 
+class SkillVersion(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.TextField(null=True, blank=True)
+    skill = models.ForeignKey(Skill)
+    
+    def __unicode__(self):
+        return "%s - %s" % (self.skill.name, self.name)
+
 class Company(models.Model):
-    """A company that Chris Sinchok has worked for."""
+    """A company that the candidate has had some associate with"""
     name = models.CharField(max_length=50)
     description = models.TextField(null=True, blank=True)
     location = models.CharField(max_length=64)
+    website = models.URLField(null=True, blank=True)
     
     class Meta:
         verbose_name_plural = "Companies"
@@ -65,7 +74,7 @@ class Company(models.Model):
 
 
 class Role(models.Model):
-    """A role Chris Sinchok played at a Company."""
+    """A role the candidateplayed at a Company."""
     title = models.CharField(max_length=50)
     description = models.TextField(null=True, blank=True)
     startdate = models.DateField()
@@ -77,7 +86,7 @@ class Role(models.Model):
 
 
 class Experience(models.Model):
-    """Experience that Chris Sinchok has had."""
+    """Experience that the candidate has had."""
     title = models.CharField(max_length=50)
     description = models.TextField(null=True, blank=True)
     startdate = models.DateField()
@@ -90,15 +99,16 @@ class Experience(models.Model):
 
 class Effect(models.Model):
     """An effect on a skill."""
-    effort = models.IntegerField();
-    effected_skill = models.ForeignKey(Skill);
-    experience = models.ForeignKey(Experience);
+    effort = models.IntegerField()
+    effected_skill = models.ForeignKey(Skill)
+    experience = models.ForeignKey(Experience)
+    version = models.ForeignKey(SkillVersion, null=True, blank=True)
     
     def __unicode__(self):
         return "%s/100 to %s during %s" % (self.effort, self.effected_skill, self.experience)
         
 class SiteProfile(models.Model):
-    """A profile for Chris Sinchok"""
+    """This is the profile for a candidate"""
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
     phone = usmodels.PhoneNumberField()

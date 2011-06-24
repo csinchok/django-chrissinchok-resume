@@ -1,15 +1,20 @@
 
-from django.conf.urls.defaults import patterns, include, handler500
+from django.conf.urls.defaults import *
 from django.conf import settings
+
+# Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
 
-handler500 # Pyflakes
+urlpatterns = patterns('',
+    # Example:
+    # (r'^{{ project_name }}/', include('{{ project_name }}.foo.urls')),
 
-urlpatterns = patterns(
-    '',
-    (r'^admin/(.*)', admin.site.root),
-    (r'^accounts/login/$', 'django.contrib.auth.views.login'),
+    # Uncomment the admin/doc line below to enable admin documentation:
+    (r'^admin/doc/', include('django.contrib.admindocs.urls')),
+
+    # Uncomment the next line to enable the admin:
+    (r'^admin/', include(admin.site.urls)),
 )
 
 if settings.DEBUG:
@@ -17,3 +22,4 @@ if settings.DEBUG:
         (r'^media/(?P<path>.*)$', 'django.views.static.serve',
          {'document_root': settings.MEDIA_ROOT}),
     )
+

@@ -1,13 +1,13 @@
 from setuptools import setup, find_packages
 
 setup(
-    name = "django-chrissinchok-resume",
+    name = "django-resume",
     version = "1.0",
     url = 'https://chrissinchok.com',
     license = 'BSD',
-    description = "a small app to manage my resume",
+    description = "An app to manage my resume",
     author = 'Chris Sinchok',
-    packages = find_packages('resume'),
-    package_dir = {'django-chrissinchok-resume': 'resume'},
+    packages = ['resume', 'resume.migrations'],
+    package_dir = {'django-resume': 'resume'},
     install_requires = ['setuptools'],
 )
